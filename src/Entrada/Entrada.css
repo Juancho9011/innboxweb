@@ -1,0 +1,9 @@
+.container-entrada {
+    display: grid;
+    grid-template-columns: 22% 76%;
+    
+    grid-gap: 10px;
+  }
+  
+
+  

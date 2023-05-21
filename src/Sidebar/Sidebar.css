@@ -1,0 +1,50 @@
+
+
+.menu li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #d8d8f7;
+  color: white; /* Texto en color blanco */
+}
+
+.menu li:hover {
+  background-color: #F2F2FF;
+}
+
+.menu li.selected {
+  background: linear-gradient(195deg, #EC407A 0%, #D81B60 100%);
+  color: #ffffff;
+}
+
+
+.sidebar {
+  width: 20%;
+  background: linear-gradient(195deg, #42424a 0%, #191919 100%);
+  position: fixed;
+  left: 0;
+  top: 80px; /* Margen superior */
+  bottom: 20px; /* Margen inferior */
+  left: 20px;
+  border-radius: 10px; /* Bordes redondeados */
+
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li:hover {
+  background-color: gray;
+}
+
+
+.menu .menu-icon {
+  margin-right: 5px; /* Margen a la derecha del icono */
+}
+
+.menu .menu-text {
+  margin-left: 5px; /* Margen a la izquierda del texto */
+}
