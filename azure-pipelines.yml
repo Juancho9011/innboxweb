@@ -11,7 +11,7 @@ variables:
   imageRepository: 'innboxweb'
   containerRegistry: 'innboxdev.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: 'v$(Build.BuildId)'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
