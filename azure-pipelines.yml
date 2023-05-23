@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '6573650a-919d-42d9-8e1d-5be038c95253'
+  dockerRegistryServiceConnection: 'c3b26cc3-3d3a-476f-a188-2c23b684ecbb'
   imageRepository: 'innboxweb'
   containerRegistry: 'innboxdev.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/dockerfile'
@@ -37,3 +37,30 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $yamlPath = "$(System.DefaultWorkingDirectory)/KubernetesManifest/innboxAzure.yml"
+          
+          $newImage = "innboxdev.azurecr.io/innboxweb:v$(Build.BuildId)"
+          
+          $yamlContent = Get-Content -Path $yamlPath -Raw
+          
+          $yamlContent = $yamlContent -replace '\[IMAGE_INNBOXWEB\]', "$newImage"
+          
+          $yamlContent | Set-Content -Path $yamlPath
+          write-host "$yamlContent"
+          
+          echo "$yamlContent"
+        pwsh: true
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/KubernetesManifest'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
