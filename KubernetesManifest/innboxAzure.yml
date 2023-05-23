@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: innboxweb
+  namespace: default
+  labels:
+    app: innboxweb
+spec:
+  ports:
+  - port: 3000
+  selector:
+    app: innboxweb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: innboxweb
+  namespace: default
+  labels:
+    app: innboxweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: innboxweb
+  template:
+    metadata:
+      labels:
+        app: innboxweb
+    spec:
+      containers:
+      - name: innboxweb
+        image: [IMAGE_INNBOXWEB]
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        ports:
+        - containerPort: 3000
