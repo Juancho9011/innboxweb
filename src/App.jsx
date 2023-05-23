@@ -67,16 +67,34 @@ const ProfileContent = () => {
 
   return (
     <>
-      {//<h5 className="card-title">Welcome {accounts[0].name}</h5>
+      {
+        //<h5 className="card-title">Welcome {accounts[0].name}</h5>
       }
       <br />
       {graphData ? (
         <ProfileData graphData={graphData} />
       ) : (
-        <Entrada/>
-        /*<Button variant="secondary" onClick={RequestProfileData}>
-          Request Profile Information
-        </Button>*/
+        <>
+          {/*<Button variant="secondary" onClick={RequestProfileData}>
+            Request Profile Information
+      </Button>*/}
+          {accounts[0] ? (
+            <Entrada
+              datosUser={{
+                name: accounts[0].name,
+                username: accounts[0].username,
+                tenantId: accounts[0].tenantId,
+                homeAccountId: accounts[0].homeAccountId,
+                idToken: accounts[0].idToken,
+                localAccountId: accounts[0].localAccountId,
+                nativeAccountId: accounts[0].nativeAccountId,
+                idTokenClaims: accounts[0].idTokenClaims,
+              }}
+            />
+          ) : (
+            <p>404</p>
+          )}
+        </>
       )}
     </>
   );
@@ -102,7 +120,6 @@ export default function App() {
   const { instance, accounts } = useMsal();
   const [graphData, setGraphData] = useState(null);
 
-
   function RequestProfileData() {
     // Silently acquires an access token which is then attached to a request for MS Graph data
     instance
@@ -120,13 +137,33 @@ export default function App() {
   return (
     <>
       {accounts[0] ? (
-        <PageLayout graphData={accounts[0].name || ""}>
+        <PageLayout
+          datosUser={{
+            name: accounts[0].name,
+            username: accounts[0].username,
+            tenantId: accounts[0].tenantId,
+            homeAccountId: accounts[0].homeAccountId,
+            idToken: accounts[0].idToken,
+            localAccountId: accounts[0].localAccountId,
+            nativeAccountId: accounts[0].nativeAccountId,
+            idTokenClaims: accounts[0].idTokenClaims,
+          }}
+        >
           <center>
             <MainContent />
           </center>
-        </PageLayout>
+        </PageLayout >
       ) : (
-        <PageLayout>
+        <PageLayout  datosUser={{
+          name: "",
+          username: "",
+          tenantId: "",
+          homeAccountId: "",
+          idToken: "",
+          localAccountId: "",
+          nativeAccountId: "",
+          idTokenClaims: "",
+        }}>
           <center>
             <MainContent />
           </center>

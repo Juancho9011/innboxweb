@@ -8,8 +8,6 @@ class ModalComponent extends Component {
   constructor(props) {
     super(props);
 
-    console.log("ññññ" , props);
-
     this.state = {
       showModal: false,
       message: "",
@@ -28,7 +26,6 @@ class ModalComponent extends Component {
 
   render() {
     const { message } = this.props;
-    console.log("informaciossssn ", message);
     return (
       <div>
         <link

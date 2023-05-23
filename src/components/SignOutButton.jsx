@@ -12,10 +12,11 @@ export const SignOutButton = () => {
   const handleLogout = (logoutType) => {
     if (logoutType === "popup") {
       instance.logoutPopup({
-        postLogoutRedirectUri: "/",
+       postLogoutRedirectUri: "/",
         mainWindowRedirectUri: "/",
       });
     } else if (logoutType === "redirect") {
+      console.log("4");
       instance.logoutRedirect({
         postLogoutRedirectUri: "/",
       });

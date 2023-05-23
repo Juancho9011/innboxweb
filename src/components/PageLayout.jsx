@@ -8,7 +8,6 @@ import React from "react";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { SignInButton } from "./SignInButton";
 import { SignOutButton } from "./SignOutButton";
-import Entrada from "../Entrada/Entrada";
 import Container from "react-bootstrap/Container";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
@@ -24,12 +23,14 @@ import { useMsal } from "@azure/msal-react";
 export const PageLayout = (props) => {
   const isAuthenticated = useIsAuthenticated();
 
+  console.log("las props aqui ", props);
+
   //function ColorSchemesExample() {
   const colorletra = {
     color: "#EC407A",
-    "font-size": "20px",
-    "font-family": "monospace",
-    "font-weight": "bold",
+    fontSize: "20px",
+    fontFamily: "monospace",
+    fontWeight: "bold",
   };
 
   const cerrarsesion = {
@@ -42,12 +43,14 @@ export const PageLayout = (props) => {
 
   const handleLogout = (logoutType) => {
     if (logoutType === "popup") {
+  
       instance.logoutPopup({
-        postLogoutRedirectUri: "/",
-        mainWindowRedirectUri: "/",
+          postLogoutRedirectUri: "/",
+          mainWindowRedirectUri: "/",
       });
     } else if (logoutType === "redirect") {
-      instance.logoutRedirect({
+   
+       instance.logoutRedirect({
         postLogoutRedirectUri: "/",
       });
     }
@@ -83,8 +86,12 @@ export const PageLayout = (props) => {
             {isAuthenticated && (
               <Nav className="ml-auto">
                 <NavDropdown title={<FaUser />} id="basic-nav-dropdown">
-                  <NavDropdown.Item>{props.graphData}</NavDropdown.Item>
-                  <NavDropdown.Item>Rol</NavDropdown.Item>
+                  <NavDropdown.Item>
+                    {props.datosUser.name || ""}
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    {props.datosUser.username || ""}
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             )}
@@ -93,7 +100,6 @@ export const PageLayout = (props) => {
           <Nav className="me-auto">
             {isAuthenticated ? (
               <Nav.Link
-                href="#pricing"
                 style={cerrarsesion}
                 onClick={() => handleLogout("popup")}
               >
@@ -101,7 +107,6 @@ export const PageLayout = (props) => {
               </Nav.Link>
             ) : (
               <Nav.Link
-                href="#pricing"
                 style={cerrarsesion}
                 onClick={() => handleLogin("popup")}
               >

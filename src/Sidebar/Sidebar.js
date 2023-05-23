@@ -10,6 +10,7 @@ const Sidebar = (props) => {
 
   const handleItemClick = (index) => {
     setSelectedItem(index);
+    
     if(index === 1 || index === 2){
     
       document.getElementById("disponibles").setAttribute("class","")
@@ -22,14 +23,15 @@ const Sidebar = (props) => {
   };
  
   return (
-    <div className="sidebar">
+    <>
+     <div className="sidebar">
       <ul className="menu">
         <li id="disponibles"
           className="selected" 
           onClick={() => handleItemClick(0)}
         >
           <span className="menu-icon">
-            <FaBinoculars />
+          🔍
           </span>
           <span className="menu-text">Servicios disponibles</span>
         </li>
@@ -38,11 +40,19 @@ const Sidebar = (props) => {
           onClick={() => handleItemClick(1)}
         >
           <span className="menu-icon">
-            <FaCalendarCheck />
+          ✅
           </span>
           <span className="menu-text">Servicios aceptados</span>
         </li>
-        <li
+      
+       
+      </ul>
+    </div></>
+   
+  );
+
+  /**
+   *   <li
           className={selectedItem === 2 ? "selected" : ""}
           onClick={() => handleItemClick(2)}
         >
@@ -51,10 +61,7 @@ const Sidebar = (props) => {
           </span>
           <span className="menu-text">Historial</span>
         </li>
-       
-      </ul>
-    </div>
-  );
+   */
 
  
 

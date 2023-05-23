@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import "./LoginForm.css"; // Importa el archivo de estilos
 import { FaUser, FaLock, FaMicrosoft } from "react-icons/fa";
 import firebase from "./../firebase/firebase";
-import EntradaLocal from "../EntradaLocal/EntradaLocal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";
-import { PageLayout } from "../components/PageLayout";
-import {MainContent} from '../../src/App'
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -28,7 +25,7 @@ const LoginForm = () => {
     event.preventDefault();
     // Realizar la lógica de autenticación o enviar los datos a un servidor aquí
     const isValidCredentials = true; /* Validar las credenciales aquí */
-
+console.log("m");
     if (isValidCredentials) {
       setLoggedIn(true);
      
@@ -49,7 +46,7 @@ const LoginForm = () => {
 
   if (isLoggedIn) { 
 
-    return <EntradaLocal />;
+   
   }
 
   return (
@@ -65,9 +62,11 @@ const LoginForm = () => {
             fontWeight: "bold",
           }}
         >
-          Bienvenido
+          Bienvenido Colaborador
         </h1>
-        <form onSubmit={handleSubmit}>
+        {
+          /**
+           * <form onSubmit={handleSubmit}>
           <div className="input-container">
             <FaUser className="input-icon" />
             <input
@@ -105,6 +104,9 @@ const LoginForm = () => {
           <br />
          
         </form>
+           */
+        }
+        
         <button
         
         style={{
@@ -116,7 +118,7 @@ const LoginForm = () => {
         }}
         onClick={() => handleLogin("popup")}
       >
-        <FaMicrosoft />
+        <FaMicrosoft /> Click aqui, Vamo a darle 	<p>&#129299; &#127859;</p>
       </button>
       </div>
     </div>

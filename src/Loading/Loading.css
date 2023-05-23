@@ -1,0 +1,25 @@
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loading-icon {
+    margin-right: 10px;
+    animation: spin 1s linear infinite;
+    font-size: 48px; /* Ajusta el tamaño del icono aquí */
+  }
+  
+  .loading-text {
+    font-size: 24px; /* Ajusta el tamaño del texto aquí */
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

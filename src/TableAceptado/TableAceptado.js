@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { FaRegEye } from "react-icons/fa";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./TableAceptado.css";
+import { BEARER } from "../constants";
+import { URL } from "../constants";
+import Loading from "../Loading/Loading";
+import NoData from "../NoData/NoData";
 
 class ModalComponent extends Component {
   constructor(props) {
@@ -38,25 +42,51 @@ class ModalComponent extends Component {
           }}
           onClick={this.handleOpenModal}
         >
-          <FaRegEye />
+          <p>&#128064;</p>
+
         </Button>
 
         <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Título del Modal</Modal.Title>
+            <Modal.Title>
+              <p>
+                <b>Detalles del Servicio Aceptado</b>
+              </p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Información capturada:</p>
-            <p>Remitente: {rowData.remitente}</p>
-            <p>Fecha: {rowData.fecha}</p>
-            <p>Asunto: {rowData.asunto}</p>
+            <p>
+              <b>Tipo de servicio:</b> {rowData.serviceType}
+            </p>
+           
+            <p>
+              <b>Fecha:</b> {rowData.startDate.split("T")[0]}
+            </p>
+            <p>
+              <b>Hora de entrada:</b> {rowData.startDate.split("T")[1]}
+            </p>
+            <p>
+              <b>Dirección:</b> {rowData.address}
+            </p>
+            <p>
+              <b>Monto a pagar: </b>
+              {rowData.value.toLocaleString("es-CO", {
+                style: "decimal",
+                currency: "COP",
+              })}{" "}
+              COP
+            </p>
+            <p>
+              <b>Horas contratadas:</b>{" "}
+              {Math.ceil(
+                (new Date(rowData.endDate) - new Date(rowData.startDate)) /
+                  3600000
+              )}
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleCloseModal}>
               Cerrar
-            </Button>
-            <Button variant="primary" onClick={this.handleCloseModal}>
-              Guardar
             </Button>
           </Modal.Footer>
         </Modal>
@@ -69,53 +99,102 @@ class TableAceptado extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        { remitente: "John Doe", asunto: "¡Hola!", fecha: "2023-05-19" },
-        {
-          remitente: "Jane Smith",
-          asunto: "Reunión de mañana",
-          fecha: "2023-05-18",
-        },
-        {
-          remitente: "acetad",
-          asunto: "Reunión de mañana",
-          fecha: "2023-05-18",
-        },
-      ],
+      datosUser: props.datosUser,
+      loading: true,
+      datafetchGetUserByUserName: null,
     };
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.fetchDataGetAllServices();
+    }, 2000);
+  }
+
+  fetchDataGetAllServices = async () => {
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        `${BEARER} ${localStorage.getItem("idToken")}`
+      );
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch(`${URL}/GetAllServices`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+        
+          const filteredData = result.values.filter((item) => {
+            return (
+              item.user == this.props.datosUser.code &&
+              item.status == "Asignado"
+            );
+          });
+          this.setState({
+            datafetchGetAllServices: filteredData,
+            loading: false,
+          });
+          // console.log(result);
+        })
+        .catch((error) => console.log("error", error));
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
+
   render() {
-    const { data } = this.state;
+    const { datafetchGetAllServices, loading } = this.state;
 
     return (
-      <div className="table-component">
-      <table className="data-table">
-        <thead>
-          <tr className="row-header">
-            <th>Tipo de servicio</th>
-            <th>Descripción</th>
-            <th>Fecha</th>
-            <th>Ver detalles</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr>
-              <td>{item.remitente}</td>
-              <td>{item.fecha}</td>
-              <td>{item.asunto}</td>
-              <td style={{ "text-align": "center" }}>                
-              <ModalComponent rowData={item} />
-              </td>
-            </tr>
-          ))}
-
-          {/* Agrega más filas según sea necesario */}
-        </tbody>
-      </table>
-     
-    </div>
+      <>
+        {
+          <div>
+            {loading ? (
+              <Loading />
+            ) : datafetchGetAllServices.length > 0 ? (
+              <div className="table-component">
+                <table className="data-table">
+                  <thead>
+                    <tr className="row-header">
+                      <th>Tipo de servicio</th>
+                      <th>Fecha</th>
+                      <th>Dirección</th>
+                      <th>Ver detalles</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {datafetchGetAllServices.map(
+                      (item, index) =>
+                        item.user === this.props.datosUser.code &&
+                        item.status === "Asignado" && (
+                          <tr key={item.code}>
+                            <td>{item.serviceType}</td>
+                            <td>{item.startDate.split("T")[0]}</td>
+                            <td>{item.address}</td>
+                            <td style={{ textAlign: "center" }}>
+                              <ModalComponent
+                                rowData={item}
+                                dataUser={this.props.datosUser}
+                              />
+                            </td>
+                          </tr>
+                        )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <NoData />
+            )}
+          </div>
+        }
+      </>
     );
   }
 }

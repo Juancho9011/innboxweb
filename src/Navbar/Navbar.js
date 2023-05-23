@@ -8,9 +8,9 @@ import {FaDoorOpen,FaSignOutAlt ,FaEyeSlash, FaHome, FaUser, FaCog, FaEnvelope, 
 function ColorSchemesExample() {
   const colorletra = {
     color: "#EC407A",
-    "font-size": "20px",
-    "font-family": "monospace",
-    "font-weight": "bold",
+    fontSize: "20px",
+    fontFamily: "monospace",
+    fontWeight: "bold",
   };
 
   const cerrarsesion = {
@@ -34,7 +34,7 @@ function ColorSchemesExample() {
           <Nav className="me-auto">
             {/* <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>*/}
-            <Nav.Link href="#pricing" style={cerrarsesion}>
+            <Nav.Link  style={cerrarsesion}>
              <FaSignOutAlt/> Cerrar Sesión
             </Nav.Link>
           </Nav>
