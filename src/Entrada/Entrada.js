@@ -92,6 +92,7 @@ class Entrada extends Component {
   };
 
   componentDidMount() {
+    console.log("componentDidMount");
     this.fetchDataGetUserByUserName();
   }
 
