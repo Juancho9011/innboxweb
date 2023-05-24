@@ -15,7 +15,7 @@ export const msalConfig = {
     auth: {
         clientId: "93b909ba-4abf-4eb5-9876-ef2a89837232",
         authority: "https://login.microsoftonline.com/103b5809-ebd8-4c51-8826-88ed15544db4",
-        redirectUri: "http://localhost:3000",
+        redirectUri: "http://innboxgrp4.eastus.cloudapp.azure.com/",
     },
     cache: {
         cacheLocation: "sessionStorage", // This configures where your cache will be stored
