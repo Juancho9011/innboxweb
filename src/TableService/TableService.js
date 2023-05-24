@@ -170,7 +170,7 @@ class TableService extends Component {
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        strRole: this.props.datosUser.roleCode,
+        strRole: this.props.datosUser.roleCode || localStorage.getItem("username"),
       });
 
       var requestOptions = {
@@ -183,14 +183,15 @@ class TableService extends Component {
       fetch(`${URL}/GetServicesByRole`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
+         
           this.setState({
-            datafetchGetServicesByRole: result.values,
+            datafetchGetServicesByRole: result.values || [],
             loading: false,
           });
           // console.log(result);
         })
         .catch((error) => {
-          console.log("error", error);
+          console.log("error !!!!!!!!!", error);
           this.setState({
             datafetchGetServicesByRole: [],
             loading: false,
@@ -198,7 +199,7 @@ class TableService extends Component {
           });
         });
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error("Error al obtener los datos!!!!!!!:", error);
       this.setState({
         datafetchGetServicesByRole: [],
         loading: false,

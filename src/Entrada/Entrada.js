@@ -67,6 +67,7 @@ import { BEARER, Bearer, URL, url } from "../constants";
 import TableService from "../TableService/TableService";
 import TableHistorial from "../TableHistorial/TableHistorial";
 import TableAceptado from "../TableAceptado/TableAceptado";
+import NoData from "../NoData/NoData";
 
 /**
  *  tablaMostrar == "disponibles" ?   
@@ -82,6 +83,7 @@ class Entrada extends Component {
       loading: true,
       datafetchGetUserByUserName: null,
       datafetchGetAllRoles: null,
+      errorService: false,
     };
   }
 
@@ -127,84 +129,55 @@ class Entrada extends Component {
             datafetchGetUserByUserName: result.values,
             loading: true,
           });
-          this.fetchDataGetAllRoles();
         })
-        .catch((error) => console.log("error", error));
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    }
-  };
-
-  fetchDataGetAllRoles = async () => {
-    try {
-      if (this.props.datosUser.idToken) {
-        localStorage.setItem("idToken", this.props.datosUser.idToken);
-        localStorage.setItem("username", this.props.datosUser.username);
-      } else {
-        // alert("vacio")
-      }
-
-      var myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        `${BEARER} ${localStorage.getItem("idToken")}`
-      );
-      myHeaders.append("Content-Type", "application/json");
-
-      var requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-
-        redirect: "follow",
-      };
-
-      fetch(`${URL}/GetAllRoles`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          const { datafetchGetUserByUserName, loading, datafetchGetAllRoles } =
-            this.state;
-
-          const filteredData = result.values.filter((item) => {
-            return item.roleCode == datafetchGetUserByUserName.roleCode;
-          });
-
+        .catch((error) => {
           this.setState({
-            datafetchGetAllRoles: filteredData[0].role,
+            datafetchGetServicesByRole: [],
             loading: false,
+            errorService: true,
           });
-
-       
-        })
-        .catch((error) => console.log("error", error));
+          console.log("error", error);
+        });
     } catch (error) {
+      this.setState({
+        datafetchGetServicesByRole: [],
+        loading: false,
+        errorService: true,
+      });
       console.error("Error al obtener los datos:", error);
     }
   };
 
   render() {
-    const { datafetchGetUserByUserName, loading, datafetchGetAllRoles } =
-      this.state;
+    const {
+      datafetchGetUserByUserName,
+      loading,
+      datafetchGetAllRoles,
+      errorService,
+    } = this.state;
 
     const { data } = this.state;
 
-  
-
     return (
       <>
-        <div className="container-entrada">
-          <div className="container-Sidebar">
-            <Sidebar onData={this.handleDataReceived} />
+        {errorService ? (
+          <NoData mensaje="Error en consumir el servicio" />
+        ) : (
+          <div className="container-entrada">
+            <div className="container-Sidebar">
+              <Sidebar onData={this.handleDataReceived} />
+            </div>
+            <div className="container-TableService">
+              {data === "disponibles" ? (
+                <TableService datosUser={datafetchGetUserByUserName} />
+              ) : data === "aceptados" ? (
+                <TableAceptado datosUser={datafetchGetUserByUserName} />
+              ) : (
+                <TableService datosUser={datafetchGetUserByUserName} />
+              )}
+            </div>
           </div>
-          <div className="container-TableService">
-            {data === "disponibles" ? (
-              <TableService datosUser={datafetchGetUserByUserName} />
-            ) : data === "aceptados" ? (
-              <TableAceptado datosUser={datafetchGetUserByUserName} />
-            ) : (
-              <TableService datosUser={datafetchGetUserByUserName} />
-            )}
-          </div>
-        </div>
+        )}
       </>
     );
   }

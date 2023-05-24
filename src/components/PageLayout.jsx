@@ -23,7 +23,6 @@ import { useMsal } from "@azure/msal-react";
 export const PageLayout = (props) => {
   const isAuthenticated = useIsAuthenticated();
 
-  console.log("las props aqui ", props);
 
   //function ColorSchemesExample() {
   const colorletra = {
