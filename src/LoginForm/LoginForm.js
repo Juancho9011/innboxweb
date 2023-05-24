@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./LoginForm.css"; // Importa el archivo de estilos
 import { FaUser, FaLock, FaMicrosoft } from "react-icons/fa";
-import firebase from "./../firebase/firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../authConfig";

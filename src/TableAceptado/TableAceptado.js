@@ -43,7 +43,6 @@ class ModalComponent extends Component {
           onClick={this.handleOpenModal}
         >
           <p>&#128064;</p>
-
         </Button>
 
         <Modal show={this.state.showModal} onHide={this.handleCloseModal}>
@@ -58,7 +57,7 @@ class ModalComponent extends Component {
             <p>
               <b>Tipo de servicio:</b> {rowData.serviceType}
             </p>
-           
+
             <p>
               <b>Fecha:</b> {rowData.startDate.split("T")[0]}
             </p>
@@ -102,6 +101,7 @@ class TableAceptado extends Component {
       datosUser: props.datosUser,
       loading: true,
       datafetchGetUserByUserName: null,
+      errorService: false,
     };
   }
 
@@ -126,10 +126,9 @@ class TableAceptado extends Component {
         redirect: "follow",
       };
 
-      fetch(`${URL}/GetAllServices`, requestOptions)
+      fetch(`${URL}/GetAllSesrvices`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-        
           const filteredData = result.values.filter((item) => {
             return (
               item.user == this.props.datosUser.code &&
@@ -142,20 +141,34 @@ class TableAceptado extends Component {
           });
           // console.log(result);
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          this.setState({
+            datafetchGetServicesByRole: [],
+            loading: false,
+            errorService: true,
+          });
+          console.log("error", error);
+        });
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      this.setState({
+        datafetchGetServicesByRole: [],
+        loading: false,
+        errorService: true,
+      });
     }
   };
 
   render() {
-    const { datafetchGetAllServices, loading } = this.state;
+    const { datafetchGetAllServices, loading, errorService } = this.state;
 
     return (
       <>
         {
           <div>
-            {loading ? (
+            {errorService ? (
+              <NoData mensaje="Error en consumir el servicio" />
+            ) : loading ? (
               <Loading />
             ) : datafetchGetAllServices.length > 0 ? (
               <div className="table-component">
@@ -190,7 +203,7 @@ class TableAceptado extends Component {
                 </table>
               </div>
             ) : (
-              <NoData />
+              <NoData mensaje="No hay datos para mostrar." />
             )}
           </div>
         }

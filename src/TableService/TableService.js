@@ -8,7 +8,6 @@ import { URL } from "../constants";
 import Loading from "./../Loading/Loading";
 import NoData from "../NoData/NoData";
 
-
 class ModalComponent extends Component {
   constructor(props) {
     super(props);
@@ -56,8 +55,8 @@ class ModalComponent extends Component {
         .then((response) => response.json())
         .then((result) => {
           console.log();
-          alert(result.description)
-          this.setState({ showModal: false});
+          alert(result.description);
+          this.setState({ showModal: false });
           window.location.reload();
         })
         .catch((error) => console.log("error", error));
@@ -68,8 +67,6 @@ class ModalComponent extends Component {
 
   render() {
     const { rowData } = this.props;
-
-
 
     return (
       <div>
@@ -85,7 +82,6 @@ class ModalComponent extends Component {
           }}
           onClick={this.handleOpenModal}
         >
-        
           <p>&#128064;</p>
         </Button>
 
@@ -154,6 +150,7 @@ class TableService extends Component {
       datosUser: props.datosUser,
       loading: true,
       datafetchGetUserByUserName: null,
+      errorService: false,
     };
   }
 
@@ -164,7 +161,6 @@ class TableService extends Component {
   }
 
   fetchDataGetServicesByRole = async () => {
-
     try {
       var myHeaders = new Headers();
       myHeaders.append(
@@ -191,22 +187,36 @@ class TableService extends Component {
             datafetchGetServicesByRole: result.values,
             loading: false,
           });
-         // console.log(result);
+          // console.log(result);
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log("error", error);
+          this.setState({
+            datafetchGetServicesByRole: [],
+            loading: false,
+            errorService: true,
+          });
+        });
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      this.setState({
+        datafetchGetServicesByRole: [],
+        loading: false,
+        errorService: true,
+      });
     }
   };
 
   render() {
-    const { datafetchGetServicesByRole, loading } = this.state;
+    const { datafetchGetServicesByRole, loading, errorService } = this.state;
 
     return (
       <>
         {
           <div>
-            {loading ? (
+            {errorService ? (
+              <NoData mensaje="Error en consumir el servicio" />
+            ) : loading ? (
               <Loading />
             ) : datafetchGetServicesByRole.length > 0 ? (
               <div className="table-component">
@@ -226,7 +236,10 @@ class TableService extends Component {
                         <td>{item.startDate.split("T")[0]}</td>
                         <td>{item.address}</td>
                         <td style={{ textAlign: "center" }}>
-                          <ModalComponent rowData={item} dataUser={this.props.datosUser} />
+                          <ModalComponent
+                            rowData={item}
+                            dataUser={this.props.datosUser}
+                          />
                         </td>
                       </tr>
                     ))}
@@ -236,7 +249,7 @@ class TableService extends Component {
                 </table>
               </div>
             ) : (
-              <NoData />
+              <NoData mensaje="No hay datos para mostrar." />
             )}
           </div>
         }
