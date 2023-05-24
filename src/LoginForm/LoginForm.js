@@ -117,7 +117,7 @@ console.log("m");
         }}
         onClick={() => handleLogin("popup")}
       >
-        <FaMicrosoft /> Click aqui, Vamo a darle 	<p>&#129299; &#127859;</p>
+       <p> <FaMicrosoft /> Click aqui, Vamo a darle &#129299; &#127859;</p>
       </button>
       </div>
     </div>
