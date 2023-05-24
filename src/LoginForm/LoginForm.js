@@ -50,7 +50,7 @@ console.log("m");
 
   return (
     <div className="body-login">
-      <div style={{ width: "370px" }} className="container-login login-form">
+      <div style={{ width: "450px" }} className="container-login login-form">
         <div className="login-form__logo"></div>
         <h1
           className="login-form__title"
@@ -113,7 +113,8 @@ console.log("m");
           fontSize: "20px",
           fontFamily: "monospace",
           fontWeight: "bold",
-          width: "100%"
+          width: "100%",
+          borderRadius: "22px"
         }}
         onClick={() => handleLogin("popup")}
       >

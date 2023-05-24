@@ -126,7 +126,7 @@ class TableAceptado extends Component {
         redirect: "follow",
       };
 
-      fetch(`${URL}/GetAllSesrvices`, requestOptions)
+      fetch(`${URL}/GetAllServices`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           const filteredData = result.values.filter((item) => {
